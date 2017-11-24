@@ -1,0 +1,86 @@
+# local vagrant settings for carmacar
+
+# specification of the environment
+environment: vagrant
+
+# Give the box a name
+box-name: <%= boxname %>
+
+# Webserver
+nginx:
+
+  # Enable/disable setup of Nginx
+  enabled: <%= installNginx %>
+
+  # User and group for Nginx
+  user: ubuntu
+  group: ubuntu
+
+  # Install support for xdebug
+  xdebug: true
+
+  # Install composer (default: true)
+  composer: true
+
+  # configuration of vhosts
+  vhosts:
+    - shortname: <%= appname %>
+
+      # Host folder where sources are located
+      src_folder: "../"
+
+      # Document root
+      attributes:
+        document_root: "application/public"
+
+      # enable self signed SSL
+      ssl_enabled: true
+
+      # Rewrite rules (required for certain frameworks)
+      environment:
+        rewrite_to_index_php: "true"
+        rewrite_to_index_html: "false"
+
+      # Domains the vhost should listen to
+      domains:
+        - dev.host
+
+# Mysql
+mysql:
+  # Enable/disable setup of Mysql
+  enabled: <%= installMysql %>
+
+  # Root User password
+  root_password:
+
+  # Admin User password
+  admin_password:
+
+  # Name of the database
+  databases:
+    - carmacar
+
+# Build tools
+build-tools:
+
+  # Enable/disable setup of frontend tools (nodejs, npm, gulp)
+  enabled: true
+
+########################################################################################################################
+##################### Do not change anything below unless you know what you are doing! #################################
+########################################################################################################################
+
+# configuration of the vm
+vm:
+  private_ip: 10.0.0.42
+  memory: 2048
+  cpus: 1
+
+# Location where the current stable version of chef cookbooks can be found
+cookbooks_path: /media/Produkte_Web-Projekte/_Allgemein/_Produkte_DevOps/chef_cookbooks/master-1.5.0
+
+# AWS Credentials to download SSL certificate from S3 (IAM user: vagrant)
+aws:
+  aws_access_key_id:
+  aws_secret_access_key:
+  region: eu-west-1

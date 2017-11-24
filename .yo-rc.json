@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Sebastian Baum",
+      "authorEmail": "sebastian.baum@ion2s.com",
+      "authorUrl": "http://www.sebbaum.de"
+    }
+  }
+}

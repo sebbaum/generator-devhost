@@ -1,0 +1,124 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+
+# References
+# https://docs.vagrantup.com.
+# https://atlas.hashicorp.com/search
+
+Vagrant.require_version '>= 1.8.0'
+VAGRANTFILE_API_VERSION = '2'
+
+# Box configuration can be customized for each developer. All configuration is done in settings.yml
+# Chef related configuration should not be changed unless you know what you are doing.
+# Basically we use convention over configuration.
+require 'yaml'
+if !File.exists?('settings.yml')
+  raise(Exception, 'settings.yml file is missing. Please copy and customize the example file')
+end
+settings = YAML.load_file 'settings.yml'
+
+# BOX_NAME = settings['box-name']
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = "ubuntu/xenial64"
+
+  # name virtualbox
+  config.vm.define settings['box-name'] do |t| end
+  config.vm.host_name = settings['box-name']
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing "localhost:8080" will access port 80 on the guest machine.
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Port forwarding for BrowserSync
+  config.vm.network :forwarded_port, guest: 3000, host: 3000, auto_correct: true
+  config.vm.network :forwarded_port, guest: 3001, host: 3001, auto_correct: true
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  # config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.network "private_network", ip: settings['vm']['private_ip']
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  # config.vm.network "public_network"
+
+  # Shared folders
+  # sync all vhost root folders
+  settings['nginx']['vhosts'].each do |vhost|
+    config.vm.synced_folder vhost['src_folder'], "/var/www/" + vhost['shortname']
+  end
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  config.vm.provider "virtualbox" do |vb|
+    # Display the VirtualBox GUI when booting the machine
+    vb.gui = false
+    vb.name = settings['box-name']
+
+    # Customize the amount of memory on the VM:
+    vb.memory = settings['vm']['memory']
+    vb.cpus = settings['vm']['cpus']
+  end
+
+  # Provision with Chef
+  config.vm.provision "chef_zero" do |chef|
+    chef.cookbooks_path = settings['cookbooks_path']
+    chef.nodes_path = "./chef/nodes"
+    #chef.data_bags_path = "./data_bags"
+
+    # overwrite cookbook attributes with local settings from settings.yml
+    # Don't change anything here unless you know what you are doing!
+    chef.json = {
+      "environment" => settings['environment'],
+      "nginx-server" => {
+        "user" => settings['nginx']['user'],
+        "group" => settings['nginx']['group'],
+        "vhosts" => settings['nginx']['vhosts'],
+        "php" => {
+          "composer" => settings['nginx']['composer'],
+          "xdebug" => settings['nginx']['xdebug']
+        },
+        "apt" => {
+          "additional-packages" => settings['nginx']['additional-packages']
+        },
+        "enabled_tools" => settings['nginx']['enabled_tools']
+      },
+      "aws" => {
+        "aws_access_key_id" => settings['aws']['aws_access_key_id'],
+        "aws_secret_access_key" => settings['aws']['aws_secret_access_key'],
+        "region" => settings['aws']['region']
+      },
+      "mysql-server" => {
+        "root_password" => settings['mysql']['root_password'],
+        "admin_password" => settings['mysql']['admin_password'],
+        "databases" => settings['mysql']['databases']
+      }
+    }
+
+    # Add recipes to install build tools
+    if settings['build-tools']['enabled'] == true
+      chef.add_recipe "build-tools"
+    end
+
+    # Add recipes to install Nginx
+    if settings['nginx']['enabled'] == true
+      chef.add_recipe "nginx-server::setup"
+      chef.add_recipe "nginx-server::php7_0"
+      chef.add_recipe "nginx-server::configure"
+    end
+
+    # Add recipes to install mysql
+    if settings['mysql']['enabled'] == true
+      chef.add_recipe "mysql-server"
+    end
+  end
+end
