@@ -10,7 +10,8 @@ const chefFolders = ['data_bags', 'environments', 'nodes'];
 
 const defaultValues = {
   mysqlRootPwd: 'root!',
-  mysqlAdminPwd: 'admin!'
+  mysqlAdminPwd: 'admin!',
+  host: 'dev.host'
 };
 
 module.exports = class extends Generator {
@@ -34,22 +35,27 @@ module.exports = class extends Generator {
       },
       {
         when: function(answers) {
+          return _.includes(answers.servers, 'nginx');
+        },
+        type: 'confirm',
+        name: 'enableSSL',
+        message: 'Do you want to enable SSL?'
+      },
+      {
+        when: function(answers) {
           return _.includes(answers.servers, 'mysql');
         },
         type: 'input',
         name: 'dbName',
         message: 'How do you want to name your database?'
-      },
-      {
-        type: 'confirm',
-        name: 'enableSSL',
-        message: 'Do you want to enable SSL?'
       }
     ];
 
     return this.prompt(questions).then(answers => {
       // To access answers later use this.answers.someAnswer;
       this.answers = answers;
+      this.answers.installNginx = _.includes(this.answers.servers, 'nginx');
+      this.answers.installMysql = _.includes(this.answers.servers, 'mysql');
     });
   }
 
@@ -60,8 +66,8 @@ module.exports = class extends Generator {
 
   writing() {
     // Create settings.yml file
-    this.answers.installNginx = _.includes(this.answers.servers, 'nginx');
-    this.answers.installMysql = _.includes(this.answers.servers, 'mysql');
+    // this.answers.installNginx = _.includes(this.answers.servers, 'nginx');
+    // this.answers.installMysql = _.includes(this.answers.servers, 'mysql');
     this.fs.copyTpl(
       this.templatePath('settings.yml'),
       this.destinationPath(path.join(devhostFolder, '/settings.yml')),
@@ -109,6 +115,17 @@ module.exports = class extends Generator {
     );
 
     // Recap
+    if (this.answers.installNginx) {
+      this.log(
+        chalk.green(
+          'Once your box is running, visite ' +
+            this._getSchema() +
+            defaultValues.host +
+            ' in your favorite browser'
+        )
+      );
+    }
+
     if (this.answers.installMysql) {
       this.log(chalk.green('Your databsename is ' + this.answers.dbName));
     }
@@ -121,5 +138,18 @@ module.exports = class extends Generator {
           '/devhost/settings.yml`'
       )
     );
+  }
+
+  /**
+   * Get the appropriate schema for the devhost.
+   * @returns {string}
+   * @private
+   */
+  _getSchema() {
+    let schema = 'http://';
+    if (this.answers.enableSSL) {
+      schema = 'https://';
+    }
+    return schema;
   }
 };

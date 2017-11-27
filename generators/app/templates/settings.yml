@@ -43,7 +43,7 @@ nginx:
 
       # Domains the vhost should listen to
       domains:
-        - dev.host
+        - <%= defaultValues.host %>
 
 # Mysql
 mysql:
