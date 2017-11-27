@@ -17,7 +17,7 @@ module.exports = class extends Generator {
     // Get the box's name
     // this.argument('boxname', { type: String, reuqired: true });
 
-    const prompts = [
+    const questions = [
       {
         type: 'input',
         name: 'name',
@@ -29,18 +29,26 @@ module.exports = class extends Generator {
         message: 'Which servers do you need?',
         choices: ['nginx', 'mysql'],
         default: ['nginx', 'mysql']
+      },
+      {
+        when: function(answers) {
+          return _.includes(answers.servers, 'mysql');
+        },
+        type: 'input',
+        name: 'dbName',
+        message: 'How do you want to name your database?'
       }
     ];
 
-    return this.prompt(prompts).then(props => {
-      // To access props later use this.props.someAnswer;
-      this.props = props;
+    return this.prompt(questions).then(answers => {
+      // To access answers later use this.answers.someAnswer;
+      this.answers = answers;
     });
   }
 
   default() {
-    mkdirp(this.props.name);
-    this.destinationRoot(this.destinationPath(this.props.name));
+    mkdirp(this.answers.name);
+    this.destinationRoot(this.destinationPath(this.answers.name));
   }
 
   writing() {
@@ -49,10 +57,10 @@ module.exports = class extends Generator {
       this.templatePath('settings.yml'),
       this.destinationPath(path.join(devhostFolder, '/settings.yml')),
       {
-        boxname: this.props.name,
-        appname: this.props.name,
-        installNginx: _.includes(this.props.servers, 'nginx'),
-        installMysql: _.includes(this.props.servers, 'mysql')
+        boxname: this.answers.name,
+        appname: this.answers.name,
+        installNginx: _.includes(this.answers.servers, 'nginx'),
+        installMysql: _.includes(this.answers.servers, 'mysql')
       }
     );
 
@@ -85,7 +93,7 @@ module.exports = class extends Generator {
     this.log(
       chalk.yellow(
         'Scaffolding finished. Change directory to ' +
-          this.props.name +
+          this.answers.name +
           '/' +
           devhostFolder +
           ' and run vagrant up to start your box!'
