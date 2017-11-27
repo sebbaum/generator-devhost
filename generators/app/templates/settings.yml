@@ -81,6 +81,6 @@ cookbooks_path: /media/Produkte_Web-Projekte/_Allgemein/_Produkte_DevOps/chef_co
 
 # AWS Credentials to download SSL certificate from S3 (IAM user: vagrant)
 aws:
-  aws_access_key_id:
-  aws_secret_access_key:
+  aws_access_key_id: <%= awsAccessKey %>
+  aws_secret_access_key: <%= awsSecretAccessKey %>
   region: eu-west-1

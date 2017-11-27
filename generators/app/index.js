@@ -24,7 +24,11 @@ module.exports = class extends Generator {
       {
         type: 'input',
         name: 'name',
-        message: "What's the name of your product/project?"
+        message: "What's the name of your product/project?",
+        validate: function(answer) {
+          let pass = !_.isEmpty(answer);
+          return pass ? true : 'Product/project name is required!';
+        }
       },
       {
         type: 'checkbox',
@@ -47,7 +51,29 @@ module.exports = class extends Generator {
         },
         type: 'input',
         name: 'dbName',
-        message: 'How do you want to name your database?'
+        message: 'How do you want to name your database?',
+        validate: function(answer) {
+          let pass = !_.isEmpty(answer);
+          return pass ? true : 'Database name is required!';
+        }
+      },
+      {
+        type: 'input',
+        name: 'awsAccessKey',
+        message: 'What is your AWS S3 access key?',
+        validate: function(answer) {
+          let pass = !_.isEmpty(answer);
+          return pass ? true : 'AWS access key is required!';
+        }
+      },
+      {
+        type: 'input',
+        name: 'awsSecreteAccessKey',
+        message: 'What is your AWS S3 secrete access key?',
+        validate: function(answer) {
+          let pass = !_.isEmpty(answer);
+          return pass ? true : 'AWS secret access key is required!';
+        }
       }
     ];
 
@@ -66,8 +92,6 @@ module.exports = class extends Generator {
 
   writing() {
     // Create settings.yml file
-    // this.answers.installNginx = _.includes(this.answers.servers, 'nginx');
-    // this.answers.installMysql = _.includes(this.answers.servers, 'mysql');
     this.fs.copyTpl(
       this.templatePath('settings.yml'),
       this.destinationPath(path.join(devhostFolder, '/settings.yml')),
@@ -78,7 +102,9 @@ module.exports = class extends Generator {
         installMysql: this.answers.installMysql,
         databaseName: this.answers.dbName || '',
         defaultValues: defaultValues,
-        enableSSL: this.answers.enableSSL
+        enableSSL: this.answers.enableSSL,
+        awsAccessKey: this.answers.awsAccessKey,
+        awsSecrectAccessKey: this.answers.awsSecrectAccessKey
       }
     );
 
