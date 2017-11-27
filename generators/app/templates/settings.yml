@@ -58,7 +58,7 @@ mysql:
 
   # Name of the database
   databases:
-    - carmacar
+    - <%= databaseName %>
 
 # Build tools
 build-tools:

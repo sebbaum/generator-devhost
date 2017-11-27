@@ -60,7 +60,8 @@ module.exports = class extends Generator {
         boxname: this.answers.name,
         appname: this.answers.name,
         installNginx: _.includes(this.answers.servers, 'nginx'),
-        installMysql: _.includes(this.answers.servers, 'mysql')
+        installMysql: _.includes(this.answers.servers, 'mysql'),
+        databaseName: this.answers.dbName || ''
       }
     );
 
