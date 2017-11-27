@@ -51,10 +51,10 @@ mysql:
   enabled: <%= installMysql %>
 
   # Root User password
-  root_password:
+  root_password: <%= defaultValues.mysqlRootPwd %>
 
   # Admin User password
-  admin_password:
+  admin_password: <%= defaultValues.mysqlAdminPwd %>
 
   # Name of the database
   databases:

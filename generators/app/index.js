@@ -8,14 +8,16 @@ const _ = require('lodash');
 const devhostFolder = 'devhost';
 const chefFolders = ['data_bags', 'environments', 'nodes'];
 
+const defaultValues = {
+  mysqlRootPwd: 'root!',
+  mysqlAdminPwd: 'admin!'
+};
+
 module.exports = class extends Generator {
   prompting() {
     this.log(
       "Let's create a new Devhost with the " + chalk.blue('devhost') + ' generator!'
     );
-
-    // Get the box's name
-    // this.argument('boxname', { type: String, reuqired: true });
 
     const questions = [
       {
@@ -53,15 +55,18 @@ module.exports = class extends Generator {
 
   writing() {
     // Create settings.yml file
+    this.answers.installNginx = _.includes(this.answers.servers, 'nginx');
+    this.answers.installMysql = _.includes(this.answers.servers, 'mysql');
     this.fs.copyTpl(
       this.templatePath('settings.yml'),
       this.destinationPath(path.join(devhostFolder, '/settings.yml')),
       {
         boxname: this.answers.name,
         appname: this.answers.name,
-        installNginx: _.includes(this.answers.servers, 'nginx'),
-        installMysql: _.includes(this.answers.servers, 'mysql'),
-        databaseName: this.answers.dbName || ''
+        installNginx: this.answers.installNginx,
+        installMysql: this.answers.installMysql,
+        databaseName: this.answers.dbName || '',
+        defaultValues: defaultValues
       }
     );
 
@@ -86,10 +91,6 @@ module.exports = class extends Generator {
     });
   }
 
-  install() {
-    // This.installDependencies();
-  }
-
   end() {
     this.log(
       chalk.yellow(
@@ -98,6 +99,20 @@ module.exports = class extends Generator {
           '/' +
           devhostFolder +
           ' and run vagrant up to start your box!'
+      )
+    );
+
+    // Recap
+    if (this.answers.installMysql) {
+      this.log(chalk.green('Your databsename is ' + this.answers.dbName));
+    }
+
+    // Config hint
+    this.log(
+      chalk.red(
+        "In order to fine tune your box's settings, edit `" +
+          this.answers.name +
+          '/devhost/settings.yml`'
       )
     );
   }
