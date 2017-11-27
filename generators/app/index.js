@@ -68,7 +68,7 @@ module.exports = class extends Generator {
       },
       {
         type: 'input',
-        name: 'awsSecreteAccessKey',
+        name: 'awsSecretAccessKey',
         message: 'What is your AWS S3 secrete access key?',
         validate: function(answer) {
           let pass = !_.isEmpty(answer);
@@ -104,7 +104,7 @@ module.exports = class extends Generator {
         defaultValues: defaultValues,
         enableSSL: this.answers.enableSSL,
         awsAccessKey: this.answers.awsAccessKey,
-        awsSecrectAccessKey: this.answers.awsSecrectAccessKey
+        awsSecretAccessKey: this.answers.awsSecretAccessKey
       }
     );
 
