@@ -39,6 +39,11 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'dbName',
         message: 'How do you want to name your database?'
+      },
+      {
+        type: 'confirm',
+        name: 'enableSSL',
+        message: 'Do you want to enable SSL?'
       }
     ];
 
@@ -66,7 +71,8 @@ module.exports = class extends Generator {
         installNginx: this.answers.installNginx,
         installMysql: this.answers.installMysql,
         databaseName: this.answers.dbName || '',
-        defaultValues: defaultValues
+        defaultValues: defaultValues,
+        enableSSL: this.answers.enableSSL
       }
     );
 

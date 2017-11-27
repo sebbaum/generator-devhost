@@ -34,7 +34,7 @@ nginx:
         document_root: "application/public"
 
       # enable self signed SSL
-      ssl_enabled: true
+      ssl_enabled: <%= enableSSL %>
 
       # Rewrite rules (required for certain frameworks)
       environment:
