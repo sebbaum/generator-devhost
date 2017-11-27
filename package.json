@@ -1,11 +1,11 @@
 {
   "name": "generator-devhost",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Create a local development environment based on vagrant, chef and virtualbox",
-  "homepage": "http://www.ion2s.com",
+  "homepage": "http://www.sebbaum.de",
   "author": {
     "name": "Sebastian Baum",
-    "email": "sebastian.baum@ion2s.com",
+    "email": "seb.baum@googlemail.com",
     "url": "http://www.sebbaum.de"
   },
   "files": [
