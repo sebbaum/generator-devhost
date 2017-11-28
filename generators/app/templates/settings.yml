@@ -8,8 +8,6 @@ box-name: <%= boxname %>
 
 # Webserver
 nginx:
-
-  # Enable/disable setup of Nginx
   enabled: <%= installNginx %>
 
   # User and group for Nginx
@@ -47,7 +45,6 @@ nginx:
 
 # Mysql
 mysql:
-  # Enable/disable setup of Mysql
   enabled: <%= installMysql %>
 
   # Root User password
@@ -62,8 +59,6 @@ mysql:
 
 # Build tools
 build-tools:
-
-  # Enable/disable setup of frontend tools (nodejs, npm, gulp)
   enabled: true
 
 ########################################################################################################################
