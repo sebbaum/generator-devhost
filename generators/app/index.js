@@ -74,6 +74,11 @@ module.exports = class extends Generator {
           let pass = !_.isEmpty(answer);
           return pass ? true : 'AWS secret access key is required!';
         }
+      },
+      {
+        type: 'confirm',
+        name: 'startBox',
+        message: 'Do you want me to start your box directly?'
       }
     ];
 
@@ -164,6 +169,12 @@ module.exports = class extends Generator {
           '/devhost/settings.yml`'
       )
     );
+
+    if (this.answers.startBox) {
+      this.spawnCommandSync('vagrant', ['up'], {
+        cwd: this.destinationPath(devhostFolder)
+      });
+    }
   }
 
   /**

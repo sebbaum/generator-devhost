@@ -19,7 +19,8 @@ describe('generator-devhost:app', () => {
       enableSSL: true,
       dbName: 'testDB',
       awsAccessKey: 'testKey',
-      awsSecretAccessKey: 'testSecKey'
+      awsSecretAccessKey: 'testSecKey',
+      startBox: false
     });
   });
 
