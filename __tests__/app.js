@@ -18,8 +18,6 @@ describe('generator-devhost:app', () => {
       servers: ['nginx', 'mysql'],
       enableSSL: true,
       dbName: 'testDB',
-      awsAccessKey: 'testKey',
-      awsSecretAccessKey: 'testSecKey',
       startBox: false
     });
   });
@@ -39,7 +37,5 @@ describe('generator-devhost:app', () => {
     assert.fileContent('devhost/settings.yml', /admin_password: admin!/);
     assert.fileContent('devhost/settings.yml', /databases:\n {4}- testDB/);
     assert.fileContent('devhost/settings.yml', /build-tools:\n {2}enabled: true/);
-    assert.fileContent('devhost/settings.yml', /aws_access_key_id: testKey/);
-    assert.fileContent('devhost/settings.yml', /aws_secret_access_key: testSecKey/);
   });
 });

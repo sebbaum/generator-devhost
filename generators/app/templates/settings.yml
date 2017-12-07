@@ -72,10 +72,4 @@ vm:
   cpus: 1
 
 # Location where the current stable version of chef cookbooks can be found
-cookbooks_path: /media/Produkte_Web-Projekte/_Allgemein/_Produkte_DevOps/chef_cookbooks/master-1.5.0
-
-# AWS Credentials to download SSL certificate from S3 (IAM user: vagrant)
-aws:
-  aws_access_key_id: <%= awsAccessKey %>
-  aws_secret_access_key: <%= awsSecretAccessKey %>
-  region: eu-west-1
+cookbooks_path: /media/Produkte_Web-Projekte/_Allgemein/_Produkte_DevOps/chef_cookbooks/master-1.5.1

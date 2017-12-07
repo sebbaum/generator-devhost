@@ -58,24 +58,6 @@ module.exports = class extends Generator {
         }
       },
       {
-        type: 'input',
-        name: 'awsAccessKey',
-        message: 'What is your AWS S3 access key?',
-        validate: function(answer) {
-          let pass = !_.isEmpty(answer);
-          return pass ? true : 'AWS access key is required!';
-        }
-      },
-      {
-        type: 'input',
-        name: 'awsSecretAccessKey',
-        message: 'What is your AWS S3 secrete access key?',
-        validate: function(answer) {
-          let pass = !_.isEmpty(answer);
-          return pass ? true : 'AWS secret access key is required!';
-        }
-      },
-      {
         type: 'confirm',
         name: 'startBox',
         message: 'Do you want me to start your box directly?'
@@ -107,9 +89,7 @@ module.exports = class extends Generator {
         installMysql: this.answers.installMysql,
         databaseName: this.answers.dbName || '',
         defaultValues: defaultValues,
-        enableSSL: this.answers.enableSSL,
-        awsAccessKey: this.answers.awsAccessKey,
-        awsSecretAccessKey: this.answers.awsSecretAccessKey
+        enableSSL: this.answers.enableSSL
       }
     );
 

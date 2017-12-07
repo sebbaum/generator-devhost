@@ -92,11 +92,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         },
         "enabled_tools" => settings['nginx']['enabled_tools']
       },
-      "aws" => {
-        "aws_access_key_id" => settings['aws']['aws_access_key_id'],
-        "aws_secret_access_key" => settings['aws']['aws_secret_access_key'],
-        "region" => settings['aws']['region']
-      },
       "mysql-server" => {
         "root_password" => settings['mysql']['root_password'],
         "admin_password" => settings['mysql']['admin_password'],
