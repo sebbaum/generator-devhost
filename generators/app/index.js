@@ -38,6 +38,13 @@ module.exports = class extends Generator {
         default: ['nginx', 'mysql']
       },
       {
+        type: 'list',
+        name: 'phpVersion',
+        message: 'Which php version do you need?',
+        choices: ['7.1', '7.0'],
+        default: '7.1'
+      },
+      {
         when: function(answers) {
           return _.includes(answers.servers, 'nginx');
         },
@@ -86,6 +93,7 @@ module.exports = class extends Generator {
         boxname: this.answers.name,
         appname: this.answers.name,
         installNginx: this.answers.installNginx,
+        phpVersion: this.answers.phpVersion,
         installMysql: this.answers.installMysql,
         databaseName: this.answers.dbName || '',
         defaultValues: defaultValues,

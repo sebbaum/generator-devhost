@@ -14,6 +14,10 @@ nginx:
   user: ubuntu
   group: ubuntu
 
+  # PHP version (7.0 or 7.1)
+  php:
+    version: "<%= phpVersion %>"
+
   # Install support for xdebug
   xdebug: true
 
@@ -72,4 +76,4 @@ vm:
   cpus: 1
 
 # Location where the current stable version of chef cookbooks can be found
-cookbooks_path: /media/Produkte_Web-Projekte/_Allgemein/_Produkte_DevOps/chef_cookbooks/master-1.7.0
+cookbooks_path: /media/Produkte_Web-Projekte/_Allgemein/_Produkte_DevOps/chef_cookbooks/master-1.8.0

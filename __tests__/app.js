@@ -16,6 +16,7 @@ describe('generator-devhost:app', () => {
     return helpers.run(path.join(__dirname, '../generators/app')).withPrompts({
       name: 'testbox',
       servers: ['nginx', 'mysql'],
+      phpVersion: '7.1',
       enableSSL: true,
       dbName: 'testDB',
       startBox: false
@@ -29,7 +30,8 @@ describe('generator-devhost:app', () => {
   it('should contain the boxname', () => {
     assert.fileContent('devhost/settings.yml', /box-name: testbox/);
     assert.fileContent('devhost/settings.yml', /nginx:\n {2}enabled: true/);
-    assert.fileContent('devhost/settings.yml', /- shortname: testbox/);
+    assert.fileContent('devhost/settings.yml', /nginx:\n {2}enabled: true/);
+    assert.fileContent('devhost/settings.yml', /php:\n {4}version: "7.1"/);
     assert.fileContent('devhost/settings.yml', /ssl_enabled: true/);
     assert.fileContent('devhost/settings.yml', /domains:\n {8}- dev.host/);
     assert.fileContent('devhost/settings.yml', /mysql:\n {2}enabled: true/);

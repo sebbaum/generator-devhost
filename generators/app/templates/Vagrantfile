@@ -85,7 +85,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "vhosts" => settings['nginx']['vhosts'],
         "php" => {
           "composer" => settings['nginx']['composer'],
-          "xdebug" => settings['nginx']['xdebug']
+          "xdebug" => settings['nginx']['xdebug'],
+          "version" => settings['nginx']['php']['version']
         },
         "apt" => {
           "additional-packages" => settings['nginx']['additional-packages']
@@ -107,7 +108,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Add recipes to install Nginx
     if settings['nginx']['enabled'] == true
       chef.add_recipe "nginx-server::setup"
-      chef.add_recipe "nginx-server::php7_0"
+      chef.add_recipe "nginx-server::php"
       chef.add_recipe "nginx-server::configure"
     end
 
