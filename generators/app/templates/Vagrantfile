@@ -91,7 +91,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "apt" => {
           "additional-packages" => settings['nginx']['additional-packages']
         },
-        "enabled_tools" => settings['nginx']['enabled_tools']
+        "enabled_tools" => settings['nginx']['enabled_tools'] || []
       },
       "mysql-server" => {
         "root_password" => settings['mysql']['root_password'],
